@@ -1,12 +1,34 @@
+# MIT License
+#
+# Copyright (c) 2020 Olivier Le Doeuff
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 # Should be run:
 # docker run -it --rm -v $(pwd):/src/ -u $(id -u):$(id -g) --device /dev/fuse --cap-add SYS_ADMIN --security-opt apparmor:unconfined
 # linuxdeployqt require for the application to be built with the oldest still supported glibc version
 FROM ubuntu:16.04
 
 # Install Dependencies
-RUN apt update && \
-    apt upgrade -y && \
-    apt -y install software-properties-common wget build-essential autoconf \
+RUN apt update                                                               && \
+    apt upgrade -y                                                           && \
+    apt -y install software-properties-common wget build-essential autoconf     \
         git fuse libgl1-mesa-dev psmisc libpq-dev libssl-dev openssl libffi-dev \
         zlib1g-dev libdbus-1-3 libpulse-mainloop-glib0 python3 python3-pip      \
         desktop-file-utils libxcb-icccm4 libxcb-image0 libxcb-keysyms1          \
@@ -15,7 +37,17 @@ RUN apt update && \
         libxcb-glx0 libxcb-present0 libxcb-randr0 libxcb-record0 libxcb-render0 \
         libxcb-res0 libxcb-screensaver0 libxcb-shape0 libxcb-shm0 libxcb-sync1  \
         libxcb-util1 libfontconfig libxcb-xkb1 libxkbcommon-x11-0               \
-        libegl1-mesa-dev unixodbc-dev curl unzip tar pkg-config
+        libegl1-mesa-dev unixodbc-dev curl unzip tar pkg-config                 \
+        libnss3                                                                 \
+        libxcomposite1                                                          \
+        libxrender-dev                                                          \
+        libxcursor-dev                                                          \
+        libxi-dev                                                               \
+        libxtst-dev                                                             \
+        libxrandr-dev                                                           \
+        libasound-dev                                                           \
+                                                                             && \
+    pip3 install --upgrade pip
 
 # Update gcc for correct c++17 support
 # Possible value 7/8/9
