@@ -67,21 +67,22 @@ RUN echo "Install GCC ${GCC}"                                             && \
     update-alternatives --config gcc
 
 # Build cool cmake version (ubuntu 16.04 comes with cmake 3.5)
-ARG CMAKE=3.19.0-rc3
+ARG CMAKE=3.19.1
 
 RUN wget -c -nv https://github.com/Kitware/CMake/releases/download/v${CMAKE}/cmake-${CMAKE}-Linux-x86_64.sh && \
     sh cmake-${CMAKE}-Linux-x86_64.sh --prefix=/usr/local --exclude-subdir && \
     rm cmake-${CMAKE}-Linux-x86_64.sh
 
 # Install Qt
-ARG QT=5.15.1
+ARG QT=5.15.2
 ARG QT_MODULES='qtcharts qtdatavis3d qtvirtualkeyboard qtwebengine qtquick3d'
 ARG QT_HOST=linux
 ARG QT_TARGET=desktop
 ARG QT_ARCH=
 
 # Download & Install Qt
-RUN pip3 install aqtinstall && \
+RUN pip3 install packaging requests py7zr
+RUN pip3 install aqtinstall --no-dependencies && \
     aqt install --outputdir /opt/qt ${QT} ${QT_HOST} ${QT_TARGET} ${QT_ARCH} -m ${QT_MODULES}
 
 ENV PATH /opt/qt/${QT}/gcc_64/bin:$PATH
@@ -92,7 +93,7 @@ ENV Qt5_DIR /opt/qt/${QT}/gcc_64/
 ENV Qt5_Dir /opt/qt/${QT}/gcc_64/
 ENV Qt6_DIR /opt/qt/${QT}/gcc_64/
 
-# Remove style I'm not interested in
+# Remove styles I'm not interested in
 RUN rm -rf ${Qt5_DIR}/qml/QtQuick/Controls.2/designer  && \
     rm -rf ${Qt5_DIR}/qml/QtQuick/Controls.2/Fusion    && \
     rm -rf ${Qt5_DIR}/qml/QtQuick/Controls.2/Imagine   && \
